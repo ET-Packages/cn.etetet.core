@@ -1,0 +1,7 @@
+{
+    "references": [
+        "ET.Core",
+        "Unity.Mathematics",
+        "MemoryPack"
+    ]
+}
