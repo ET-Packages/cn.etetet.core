@@ -35,7 +35,7 @@ namespace ET
 
         private const int CheckInteral = 2000;
 
-        private const int SessionTimeoutTime = 4000;
+        public const int SessionTimeoutTime = 4000;
 
         private static void Check(this SessionIdleCheckerComponent self)
         {
