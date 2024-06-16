@@ -45,7 +45,10 @@ namespace ET
             
             World.Instance.AddSingleton<MessageQueue>();
             World.Instance.AddSingleton<NetServices>();
-            World.Instance.AddSingleton<LogMsg>();
+            
+            LogMsg logMsg = World.Instance.AddSingleton<LogMsg>();
+            logMsg.AddIgnore(LoginOuter.C2G_Ping);
+            logMsg.AddIgnore(LoginOuter.G2C_Ping);
             
             // 创建需要reload的code singleton
             CodeTypes.Instance.CodeProcess();
