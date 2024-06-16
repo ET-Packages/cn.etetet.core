@@ -36,6 +36,7 @@
         public const int ERR_RpcFail = 110307;
         public const int ERR_ReloadFail = 110308;
         public const int ERR_ConnectGateKeyError = 110309;
+
         public const int ERR_SessionSendOrRecvTimeout = 110311;
         public const int ERR_OuterSessionRecvInnerMessage = 110312;
         public const int ERR_NotFoundActor = 110313;

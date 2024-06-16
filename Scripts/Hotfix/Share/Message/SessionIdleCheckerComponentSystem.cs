@@ -35,7 +35,11 @@ namespace ET
 
         private const int CheckInteral = 2000;
 
-        public const int SessionTimeoutTime = 4000;
+#if UNITY_EDITOR && DEBUG
+        public const int SessionTimeoutTime = 400000;
+#else
+        public const int SessionTimeoutTime = 40000;
+#endif
 
         private static void Check(this SessionIdleCheckerComponent self)
         {
