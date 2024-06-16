@@ -16,7 +16,7 @@ namespace ET
             {
                 Entity entity = bsonSerializer.Deserialize(context);
                 entity.IsSerilizeWithParent = true;
-                componentsCollection.Add(Entity.GetLongHashCodeByType(entity.GetType()), entity);
+                componentsCollection.Add(entity.GetLongHashCode(), entity);
             }
             bsonReader.ReadEndArray();
 

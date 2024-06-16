@@ -72,7 +72,7 @@ namespace ET
                 Entity entity = null!;
                 formatter.Deserialize(ref reader, ref entity!);
                 entity.IsSerilizeWithParent = true;
-                long key = Entity.GetLongHashCodeByType(entity.GetType());
+                long key = entity.GetLongHashCode();
                 value.Add(key, entity);
             }
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using MemoryPack;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.Options;
@@ -26,9 +27,14 @@ namespace ET
             return ObjectPool.Fetch<T>();
         }
         
-        public static long GetLongHashCodeByType(Type type)
+        public virtual long GetLongHashCode()
         {
-            return EntitySystemSingleton.Instance.GetLongHashCode(type);
+            return this.GetType().TypeHandle.Value.ToInt64();
+        }
+        
+        public virtual long GetComponentLongHashCode(Type type)
+        {
+            return type.TypeHandle.Value.ToInt64();
         }
         
 #if ENABLE_VIEW && UNITY_EDITOR
@@ -512,7 +518,7 @@ namespace ET
 
         private void AddToComponents(Entity component)
         {
-            this.Components.Add(GetLongHashCodeByType(component.GetType()), component);
+            this.Components.Add(component.GetLongHashCode(), component);
         }
 
         private void RemoveComponentNoDispose(Entity component)
@@ -522,7 +528,7 @@ namespace ET
                 return;
             }
 
-            if (!this.components.Remove(GetLongHashCodeByType(component.GetType())))
+            if (!this.components.Remove(component.GetLongHashCode()))
             {
                 return;
             }
@@ -580,7 +586,7 @@ namespace ET
 
             Type type = typeof (K);
 
-            if (this.components.Remove(GetLongHashCodeByType(type), out Entity c))
+            if (this.components.Remove(this.GetComponentLongHashCode(type), out Entity c))
             {
                 c.Dispose();
             }
@@ -598,7 +604,7 @@ namespace ET
                 return;
             }
 
-            if (this.components.Remove(GetLongHashCodeByType(type), out Entity c))
+            if (this.components.Remove(this.GetComponentLongHashCode(type), out Entity c))
             {
                 c.Dispose();
             }
@@ -618,7 +624,7 @@ namespace ET
             }
             
             Entity component;
-            if (!this.components.TryGetValue(GetLongHashCodeByType(typeof (K)), out component))
+            if (!this.components.TryGetValue(this.GetComponentLongHashCode(typeof (K)), out component))
             {
                 return default;
             }
@@ -641,7 +647,7 @@ namespace ET
             }
             
             Entity component;
-            if (!this.components.TryGetValue(GetLongHashCodeByType(type), out component))
+            if (!this.components.TryGetValue(this.GetComponentLongHashCode(type), out component))
             {
                 return null;
             }
@@ -662,7 +668,7 @@ namespace ET
         public Entity AddComponent(Entity component)
         {
             Type type = component.GetType();
-            if (this.components != null && this.components.ContainsKey(GetLongHashCodeByType(type)))
+            if (this.components != null && this.components.ContainsKey(this.GetComponentLongHashCode(type)))
             {
                 throw new Exception($"entity already has component: {type.FullName}");
             }
@@ -674,7 +680,7 @@ namespace ET
 
         public Entity AddComponent(Type type, bool isFromPool = false)
         {
-            if (this.components != null && this.components.ContainsKey(GetLongHashCodeByType(type)))
+            if (this.components != null && this.components.ContainsKey(this.GetComponentLongHashCode(type)))
             {
                 throw new Exception($"entity already has component: {type.FullName}");
             }
@@ -691,7 +697,7 @@ namespace ET
         public K AddComponentWithId<K>(long id, bool isFromPool = false) where K : Entity, IAwake, new()
         {
             Type type = typeof (K);
-            if (this.components != null && this.components.ContainsKey(GetLongHashCodeByType(type)))
+            if (this.components != null && this.components.ContainsKey(this.GetComponentLongHashCode(type)))
             {
                 throw new Exception($"entity already has component: {type.FullName}");
             }
@@ -708,7 +714,7 @@ namespace ET
         public K AddComponentWithId<K, P1>(long id, P1 p1, bool isFromPool = false) where K : Entity, IAwake<P1>, new()
         {
             Type type = typeof (K);
-            if (this.components != null && this.components.ContainsKey(GetLongHashCodeByType(type)))
+            if (this.components != null && this.components.ContainsKey(this.GetComponentLongHashCode(type)))
             {
                 throw new Exception($"entity already has component: {type.FullName}");
             }
@@ -725,7 +731,7 @@ namespace ET
         public K AddComponentWithId<K, P1, P2>(long id, P1 p1, P2 p2, bool isFromPool = false) where K : Entity, IAwake<P1, P2>, new()
         {
             Type type = typeof (K);
-            if (this.components != null && this.components.ContainsKey(GetLongHashCodeByType(type)))
+            if (this.components != null && this.components.ContainsKey(this.GetComponentLongHashCode(type)))
             {
                 throw new Exception($"entity already has component: {type.FullName}");
             }
@@ -742,7 +748,7 @@ namespace ET
         public K AddComponentWithId<K, P1, P2, P3>(long id, P1 p1, P2 p2, P3 p3, bool isFromPool = false) where K : Entity, IAwake<P1, P2, P3>, new()
         {
             Type type = typeof (K);
-            if (this.components != null && this.components.ContainsKey(GetLongHashCodeByType(type)))
+            if (this.components != null && this.components.ContainsKey(this.GetComponentLongHashCode(type)))
             {
                 throw new Exception($"entity already has component: {type.FullName}");
             }
