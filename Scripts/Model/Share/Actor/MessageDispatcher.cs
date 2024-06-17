@@ -32,13 +32,6 @@ namespace ET
             {
                 this.Register(type);
             }
-            
-            HashSet<Type> types2 = CodeTypes.Instance.GetTypes(typeof (MessageLocationHandlerAttribute));
-            
-            foreach (Type type in types2)
-            {
-                this.Register(type);
-            }
         }
         
         private void Register(Type type)
