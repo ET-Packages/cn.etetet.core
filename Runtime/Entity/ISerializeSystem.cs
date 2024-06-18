@@ -28,11 +28,6 @@ namespace ET
 			return typeof(ISerializeSystem);
 		}
 
-		int ISystemType.GetInstanceQueueIndex()
-		{
-			return InstanceQueueIndex.None;
-		}
-
 		Type ISystemType.Type()
 		{
 			return typeof(T);

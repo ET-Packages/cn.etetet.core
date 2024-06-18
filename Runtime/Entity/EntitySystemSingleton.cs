@@ -10,7 +10,7 @@ namespace ET
         
         public void Awake()
         {
-            this.TypeSystems = new TypeSystems(InstanceQueueIndex.Max);
+            this.TypeSystems = new TypeSystems();
 
             foreach (Type type in CodeTypes.Instance.GetTypes(typeof (EntitySystemAttribute)))
             {
@@ -20,10 +20,10 @@ namespace ET
                 {
                     TypeSystems.OneTypeSystems oneTypeSystems = this.TypeSystems.GetOrCreateOneTypeSystems(iSystemType.Type());
                     oneTypeSystems.Map.Add(iSystemType.SystemType(), obj);
-                    int index = iSystemType.GetInstanceQueueIndex();
-                    if (index > InstanceQueueIndex.None && index < InstanceQueueIndex.Max)
+                    
+                    if (iSystemType is IClassEventSystem)
                     {
-                        oneTypeSystems.QueueFlag[index] = true;
+                        oneTypeSystems.ClassType.Add(iSystemType.SystemType());
                     }
                 }
             }

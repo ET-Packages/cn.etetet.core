@@ -7,21 +7,9 @@ namespace ET
     {
         public class OneTypeSystems
         {
-            public OneTypeSystems(int count)
-            {
-                this.QueueFlag = new bool[count];
-            }
-            
             public readonly UnOrderMultiMap<Type, SystemObject> Map = new();
             // 这里不用hash，数量比较少，直接for循环速度更快
-            public readonly bool[] QueueFlag;
-        }
-
-        private readonly int count;
-
-        public TypeSystems(int count)
-        {
-            this.count = count;
+            public readonly List<Type> ClassType = new();
         }
         
         private readonly Dictionary<Type, OneTypeSystems> typeSystemsMap = new();
@@ -35,7 +23,7 @@ namespace ET
                 return systems;
             }
 
-            systems = new OneTypeSystems(this.count);
+            systems = new OneTypeSystems();
             this.typeSystemsMap.Add(type, systems);
             return systems;
         }

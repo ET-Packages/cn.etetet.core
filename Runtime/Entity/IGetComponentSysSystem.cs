@@ -28,11 +28,6 @@ namespace ET
 			return typeof(IGetComponentSysSystem);
 		}
 
-		int ISystemType.GetInstanceQueueIndex()
-		{
-			return InstanceQueueIndex.None;
-		}
-
 		Type ISystemType.Type()
 		{
 			return typeof(T);

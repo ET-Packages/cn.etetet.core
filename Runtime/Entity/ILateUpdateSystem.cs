@@ -6,7 +6,7 @@ namespace ET
 	{
 	}
 	
-	public interface ILateUpdateSystem: ISystemType
+	public interface ILateUpdateSystem: ISystemType, IClassEventSystem
 	{
 		void Run(Entity o);
 	}
@@ -27,11 +27,6 @@ namespace ET
 		Type ISystemType.SystemType()
 		{
 			return typeof(ILateUpdateSystem);
-		}
-
-		int ISystemType.GetInstanceQueueIndex()
-		{
-			return InstanceQueueIndex.LateUpdate;
 		}
 
 		protected abstract void LateUpdate(T self);

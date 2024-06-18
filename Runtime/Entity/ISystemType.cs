@@ -6,6 +6,5 @@ namespace ET
     {
         Type Type();
         Type SystemType();
-        int GetInstanceQueueIndex();
     }
 }
