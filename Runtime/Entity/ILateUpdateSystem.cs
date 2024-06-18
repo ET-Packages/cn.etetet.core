@@ -2,31 +2,20 @@
 
 namespace ET
 {
-	public interface ILateUpdate
+	public struct LateUpdateEvent
 	{
 	}
 	
-	public interface ILateUpdateSystem: ISystemType, IClassEventSystem
+	public interface ILateUpdate: IClassEvent<LateUpdateEvent>
 	{
-		void Run(Entity o);
 	}
 
 	[EntitySystem]
-	public abstract class LateUpdateSystem<T> : SystemObject, ILateUpdateSystem where T: Entity, ILateUpdate
+	public abstract class LateUpdateSystem<T> : ClassEventSystem<T, LateUpdateEvent> where T: Entity, ILateUpdate
 	{
-		void ILateUpdateSystem.Run(Entity o)
+		protected override void Handle(Entity e, LateUpdateEvent t)
 		{
-			this.LateUpdate((T)o);
-		}
-
-		Type ISystemType.Type()
-		{
-			return typeof(T);
-		}
-
-		Type ISystemType.SystemType()
-		{
-			return typeof(ILateUpdateSystem);
+			this.LateUpdate((T)e);
 		}
 
 		protected abstract void LateUpdate(T self);

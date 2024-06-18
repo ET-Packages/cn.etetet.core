@@ -70,7 +70,7 @@ namespace ET
         {
             try
             {
-                this.EntitySystem.Update();
+                this.EntitySystem.Publish(new UpdateEvent());
             }
             catch (Exception e)
             {
@@ -82,7 +82,7 @@ namespace ET
         {
             try
             {
-                this.EntitySystem.LateUpdate();
+                this.EntitySystem.Publish(new LateUpdateEvent());
                 FrameFinishUpdate();
                 
                 this.ThreadSynchronizationContext.Update();

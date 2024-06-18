@@ -10,7 +10,7 @@ namespace ET
     {
     }
     
-    public interface AClassEventSystem<T>: ISystemType, IClassEventSystem where T: struct
+    public interface AClassEventSystem<in T>: ISystemType, IClassEventSystem where T: struct
     {
         void Run(Entity e, T t);
     }
@@ -29,7 +29,7 @@ namespace ET
 
         public Type Type()
         {
-            return typeof(T);
+            return typeof(E);
         }
 
         protected abstract void Handle(Entity e, T t);

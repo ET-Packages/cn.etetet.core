@@ -2,31 +2,20 @@
 
 namespace ET
 {
-	public interface IUpdate
+	public struct UpdateEvent
 	{
 	}
 	
-	public interface IUpdateSystem: ISystemType, IClassEventSystem
+	public interface IUpdate: IClassEvent<UpdateEvent>
 	{
-		void Run(Entity o);
 	}
 
 	[EntitySystem]
-	public abstract class UpdateSystem<T> : SystemObject, IUpdateSystem where T: Entity, IUpdate
+	public abstract class UpdateSystem<T> : ClassEventSystem<T, UpdateEvent> where T: Entity, IUpdate
 	{
-		void IUpdateSystem.Run(Entity o)
+		protected override void Handle(Entity e, UpdateEvent t)
 		{
-			this.Update((T)o);
-		}
-
-		Type ISystemType.Type()
-		{
-			return typeof(T);
-		}
-
-		Type ISystemType.SystemType()
-		{
-			return typeof(IUpdateSystem);
+			this.Update((T)e);
 		}
 
 		protected abstract void Update(T self);
