@@ -45,10 +45,12 @@ namespace ET
         {
             return allTypes;
         }
-
+        
         public Type GetType(string typeName)
         {
-            return this.allTypes[typeName];
+            Type type = null;
+            this.allTypes.TryGetValue(typeName, out type);
+            return type;
         }
         
         public void CodeProcess()
