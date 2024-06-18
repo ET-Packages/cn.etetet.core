@@ -58,11 +58,11 @@ namespace ET
             this.EntitySystem = new EntitySystem();
             this.Mailboxes = new Mailboxes();
             this.ThreadSynchronizationContext = new ThreadSynchronizationContext();
-#if UNITY
-            this.Log = Logger.Instance.Log;
-#else
-            this.Log = new NLogger(SceneTypeSingleton.Instance.GetSceneName(sceneType), this.Process, this.Id);
-#endif
+
+            LogInvoker logInvoker = new()
+                    { Fiber = this.Id, Process = this.Process, SceneName = SceneTypeSingleton.Instance.GetSceneName(sceneType) };
+            this.Log = EventSystem.Instance.Invoke<LogInvoker, ILog>(logInvoker);
+            
             this.Root = new Scene(this, id, 1, sceneType, name);
         }
 
