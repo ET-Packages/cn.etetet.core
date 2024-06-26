@@ -12,5 +12,14 @@
     "type": "git",
     "url": "https://github.com/egametang/ET"
   },
-  "relatedPackages": {}
+  "relatedPackages": {},
+  "dependencies": {
+    "cn.etetet.excel": "0.0.1",
+    "cn.etetet.proto": "0.0.1",
+    "cn.etetet.sourcegenerator": "0.0.1"
+  },
+  "publishConfig": 
+  { 
+    "registry": "https://npm.pkg.github.com/@ET-Packages" 
+  }
 }

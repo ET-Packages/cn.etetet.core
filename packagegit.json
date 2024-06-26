@@ -2,9 +2,6 @@
 "Id": 1,
 "Name": "Core",
 "GitDependencies": {
-  "com.cysharp.memorypack": "https://github.com/Cysharp/MemoryPack.git?path=src/MemoryPack.Unity/Assets/Plugins/MemoryPack#1.10.0",
-  "cn.etetet.excel": "https://github.com/ET-Packages/cn.etetet.excel.git#0.0.1",
-  "cn.etetet.proto": "https://github.com/ET-Packages/cn.etetet.proto.git#0.0.1",
-  "cn.etetet.sourcegenerator": "https://github.com/ET-Packages/cn.etetet.sourcegenerator.git#0.0.1"
+  "com.cysharp.memorypack": "https://github.com/Cysharp/MemoryPack.git?path=src/MemoryPack.Unity/Assets/Plugins/MemoryPack#1.10.0"
 }
 }
