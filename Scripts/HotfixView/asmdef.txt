@@ -7,6 +7,7 @@
         "ET.Model",
         "ET.Hotfix",
         "ET.ModelView",
-        "YooAsset"
+        "YooAsset",
+	"ET.SourceGeneratorAttribute"
     ]
 }

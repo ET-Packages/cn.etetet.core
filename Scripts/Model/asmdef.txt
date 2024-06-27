@@ -2,6 +2,7 @@
     "references": [
         "ET.Core",
         "Unity.Mathematics",
-        "MemoryPack"
+        "MemoryPack",
+	"ET.SourceGeneratorAttribute"
     ]
 }

@@ -4,7 +4,7 @@ namespace ET
 {
 	[AttributeUsage(AttributeTargets.Class)]
 	[EnableClass]
-	public class BaseAttribute: Attribute
+	public class BaseAttribute: EnableClassAttribute
 	{
 	}
 }
