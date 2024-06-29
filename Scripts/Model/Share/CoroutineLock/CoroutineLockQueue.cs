@@ -8,19 +8,7 @@ namespace ET
     {
         public long type;
 
-        private EntityRef<CoroutineLock> currentCoroutineLock;
-
-        public CoroutineLock CurrentCoroutineLock
-        {
-            get
-            {
-                return this.currentCoroutineLock;
-            }
-            set
-            {
-                this.currentCoroutineLock = value;
-            }
-        }
+        public bool isStart;
         
         public Queue<WaitCoroutineLock> queue = new();
 

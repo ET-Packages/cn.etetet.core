@@ -6,6 +6,7 @@
         [EntitySystem]
         private static void Awake(this CoroutineLockQueue self, long type)
         {
+            self.isStart = false;
             self.type = type;
         }
         
@@ -14,15 +15,17 @@
         {
             self.queue.Clear();
             self.type = 0;
-            self.CurrentCoroutineLock = null;
+            self.isStart = false;
         }
         
         public static async ETTask<CoroutineLock> Wait(this CoroutineLockQueue self, int time)
         {
-            if (self.CurrentCoroutineLock == null)
+            CoroutineLock coroutineLock = null;
+            if (!self.isStart)
             {
-                self.CurrentCoroutineLock = self.AddChild<CoroutineLock, long, long, int>(self.type, self.Id, 1, true);
-                return self.CurrentCoroutineLock;
+                self.isStart = true;
+                coroutineLock = self.AddChild<CoroutineLock, long, long, int>(self.type, self.Id, 1, true);
+                return coroutineLock;
             }
 
             WaitCoroutineLock waitCoroutineLock = WaitCoroutineLock.Create();
@@ -32,8 +35,8 @@
                 long tillTime = TimeInfo.Instance.ClientFrameTime() + time;
                 self.Root().GetComponent<TimerComponent>().NewOnceTimer(tillTime, TimerCoreInvokeType.CoroutineTimeout, waitCoroutineLock);
             }
-            self.CurrentCoroutineLock = await waitCoroutineLock.Wait();
-            return self.CurrentCoroutineLock;
+            coroutineLock = await waitCoroutineLock.Wait();
+            return coroutineLock;
         }
 
         // 返回值，是否找到了一个有效的协程锁
