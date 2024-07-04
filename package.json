@@ -1,7 +1,7 @@
 {
   "name": "cn.etetet.core",
   "displayName": "ET.Core",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "et core",
   "author": {
     "name": "tanghai",
@@ -13,7 +13,7 @@
   },
   "relatedPackages": {},
   "dependencies": {
-    "cn.etetet.excel": "0.0.3",
+    "cn.etetet.excel": "0.0.4",
     "cn.etetet.proto": "0.0.3",
     "cn.etetet.sourcegenerator": "0.0.4"
   },
