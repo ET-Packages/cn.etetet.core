@@ -6,35 +6,15 @@
 },
 "ScriptsReferences": {
   "ModelView": [
-    "ET.Core",
-    "Unity.Mathematics",
-    "ET.Loader",
-    "ET.Model",
-    "YooAsset",
     "ET.SourceGeneratorAttribute"
   ],
   "Model": [
-    "ET.Core",
-    "Unity.Mathematics",
-    "MemoryPack",
     "ET.SourceGeneratorAttribute"
   ],
   "HotfixView": [
-    "ET.Core",
-    "Unity.Mathematics",
-    "ET.Loader",
-    "MemoryPack",
-    "ET.Model",
-    "ET.Hotfix",
-    "ET.ModelView",
-    "YooAsset",
     "ET.SourceGeneratorAttribute"
   ],
   "Hotfix": [
-    "ET.Core",
-    "Unity.Mathematics",
-    "MemoryPack",
-    "ET.Model",
     "ET.SourceGeneratorAttribute"
   ]
 }

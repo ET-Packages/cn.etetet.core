@@ -1,7 +1,7 @@
 {
   "name": "cn.etetet.core",
   "displayName": "ET.Core",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "et core",
   "author": {
     "name": "tanghai",
@@ -13,12 +13,10 @@
   },
   "relatedPackages": {},
   "dependencies": {
-    "cn.etetet.excel": "0.0.4",
     "cn.etetet.proto": "0.0.3",
     "cn.etetet.sourcegenerator": "0.0.4"
   },
-  "publishConfig": 
-  { 
-    "registry": "https://npm.pkg.github.com/@ET-Packages" 
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/@ET-Packages"
   }
 }
