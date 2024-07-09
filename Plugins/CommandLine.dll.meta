@@ -29,6 +29,7 @@ PluginImporter:
     second:
       enabled: 1
       settings:
+        AndroidSharedLibraryType: Executable
         CPU: ARMv7
   - first:
       Any: 
@@ -66,7 +67,7 @@ PluginImporter:
     second:
       enabled: 1
       settings:
-        CPU: x86_64
+        CPU: AnyCPU
   - first:
       WebGL: WebGL
     second:

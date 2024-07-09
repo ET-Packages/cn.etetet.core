@@ -18,6 +18,18 @@ namespace ET
                 return Run("/usr/local/bin/pwsh", arguments, workingDirectory, waitExit);
             }
         }
+        
+        public static System.Diagnostics.Process DotNet(string arguments, string workingDirectory = ".", bool waitExit = false)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return Run("dotnet.exe", arguments, workingDirectory, waitExit);
+            }
+            else
+            {
+                return Run("/usr/local/bin/dotnet", arguments, workingDirectory, waitExit);
+            }
+        }
 
         public static System.Diagnostics.Process Run(string exe, string arguments, string workingDirectory = ".", bool waitExit = false)
         {
