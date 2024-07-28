@@ -2,8 +2,8 @@
     "name": "ET.Core",
     "rootNamespace": "ET",
     "references": [
-        "MemoryPack",
-        "ET.SourceGeneratorAttribute"
+        "ET.SourceGeneratorAttribute",
+        "ET.MemoryPack"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
