@@ -7,7 +7,7 @@ namespace ET
     {
         private readonly Dictionary<Type, Queue<EntityRef<Entity>>> queues = new();
         
-        private Queue<EntityRef<Entity>> GetQueue(Type type)
+        public Queue<EntityRef<Entity>> GetQueue(Type type)
         {
             if (!this.queues.TryGetValue(type, out var queue))
             {
