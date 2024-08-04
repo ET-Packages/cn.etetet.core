@@ -79,8 +79,16 @@ namespace ET
                 this.schedulers[(int) schedulerType].Add(fiberId);
                 
                 TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
-                
-                fiber.ThreadSynchronizationContext.Post(async () =>
+
+                fiber.ThreadSynchronizationContext.Post(() =>
+                {
+                    Action().NoContext();
+                });
+
+                await tcs.Task;
+                return fiberId;
+
+                async ETTask Action()
                 {
                     try
                     {
@@ -92,10 +100,7 @@ namespace ET
                     {
                         Log.Error($"init fiber fail: {sceneType} {e}");
                     }
-                });
-
-                await tcs.Task;
-                return fiberId;
+                }
             }
             catch (Exception e)
             {
