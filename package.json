@@ -1,8 +1,8 @@
 ﻿{
   "name": "cn.etetet.core",
   "displayName": "ET.Core",
-  "version": "0.0.18",
-  "description": "et core",
+  "version": "0.0.19",
+  "description": "et框架核心, 实现了纤程，网络，entity等et基础功能",
   "author": {
     "name": "tanghai",
     "url": "https://github.com/egametang/ET"
@@ -13,7 +13,7 @@
   },
   "relatedPackages": {},
   "dependencies": {
-    "cn.etetet.sourcegenerator": "0.0.4",
+    "cn.etetet.sourcegenerator": "0.0.5",
     "cn.etetet.memorypack": "1.10.0"
   },
   "publishConfig": {
