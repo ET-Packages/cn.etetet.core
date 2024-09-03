@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 
 namespace ET
@@ -9,7 +10,31 @@ namespace ET
         [EntitySystem]
         private static void Awake(this NetComponent self, IPEndPoint address, NetworkProtocol protocol)
         {
-            self.AService = new KService(address, protocol, ServiceType.Outer);
+            IKcpTransport kcpTransport;
+            
+#if UNITY_WEBGL && !UNITY_EDITOR
+            kcpTransport = new WebSocketTransport(address);
+#else
+            switch (protocol)
+            {
+                case NetworkProtocol.TCP:
+                {
+                    kcpTransport = new TcpTransport(address);
+                    break;
+                }
+                case NetworkProtocol.UDP:
+                {
+                    kcpTransport = new UdpTransport(address);
+                    break;
+                }
+                default:
+                    throw new Exception($"protocol error: {protocol}");
+            }
+#endif
+            
+
+
+            self.AService = new KService(kcpTransport, ServiceType.Outer);
             self.AService.AcceptCallback = self.OnAccept;
             self.AService.ReadCallback = self.OnRead;
             self.AService.ErrorCallback = self.OnError;
@@ -18,7 +43,30 @@ namespace ET
         [EntitySystem]
         private static void Awake(this NetComponent self, AddressFamily addressFamily, NetworkProtocol protocol)
         {
-            self.AService = new KService(addressFamily, protocol, ServiceType.Outer);
+            IKcpTransport kcpTransport;
+            
+#if UNITY_WEBGL && !UNITY_EDITOR
+            kcpTransport = new WebSocketTransport();
+#else
+            switch (protocol)
+            {
+                case NetworkProtocol.TCP:
+                {
+                    kcpTransport = new TcpTransport(addressFamily);
+                    break;
+                }
+                case NetworkProtocol.UDP:
+                {
+                    kcpTransport = new UdpTransport(addressFamily);
+                    break;
+                }
+                default:
+                    throw new Exception($"protocol error: {protocol}");
+            }
+#endif
+
+            
+            self.AService = new KService(kcpTransport, ServiceType.Outer);
             self.AService.ReadCallback = self.OnRead;
             self.AService.ErrorCallback = self.OnError;
         }

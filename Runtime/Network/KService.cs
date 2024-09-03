@@ -48,41 +48,11 @@ namespace ET
         
         public NetworkProtocol Protocol { get; set; }
 
-        public KService(IPEndPoint ipEndPoint, NetworkProtocol protocol, ServiceType serviceType)
+        public KService(IKcpTransport kcpTransport, ServiceType serviceType)
         {
             this.ServiceType = serviceType;
             this.startTime = TimeInfo.Instance.ClientFrameTime();
-            this.Protocol = protocol;
-            switch (this.Protocol)
-            {
-                case NetworkProtocol.TCP:
-                    this.Transport = new TcpTransport(ipEndPoint);
-                    break;
-                case NetworkProtocol.UDP:
-                    this.Transport = new UdpTransport(ipEndPoint);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException($"{this.Protocol}");
-            }
-        }
-
-        public KService(AddressFamily addressFamily, NetworkProtocol protocol, ServiceType serviceType)
-        {
-            this.ServiceType = serviceType;
-            this.startTime = TimeInfo.Instance.ClientFrameTime();
-            this.Transport = new TcpTransport(addressFamily);
-            this.Protocol = protocol;
-            switch (this.Protocol)
-            {
-                case NetworkProtocol.TCP:
-                    this.Transport = new TcpTransport(addressFamily);
-                    break;
-                case NetworkProtocol.UDP:
-                    this.Transport = new UdpTransport(addressFamily);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException($"{this.Protocol}");
-            }
+            this.Transport = kcpTransport;
         }
 
         // 保存所有的channel
@@ -104,12 +74,6 @@ namespace ET
         private readonly List<long> timeOutTime = new();
         // 记录最小时间，不用每次都去MultiMap取第一个值
         private long minTime;
-
-#if !UNITY
-        public readonly ArrayPool<byte> byteArrayPool = ArrayPool<byte>.Create(2048,3000);
-#else
-        public readonly ArrayPool<byte> byteArrayPool = ArrayPool<byte>.Create(2048,200);
-#endif
 
         private readonly Dictionary<long, Action<byte>> routerAckCallback = new();
 
