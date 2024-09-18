@@ -1,3 +1,9 @@
 obj/
-/**/AssemblyReference.asmref
-/**/AssemblyReference.asmref.meta
+/Scripts/Hotfix/**/AssemblyReference.asmref
+/Scripts/Hotfix/**/AssemblyReference.asmref.meta
+/Scripts/Model/**/AssemblyReference.asmref
+/Scripts/Model/**/AssemblyReference.asmref.meta
+/Scripts/HotfixView/**/AssemblyReference.asmref
+/Scripts/HotfixView/**/AssemblyReference.asmref.meta
+/Scripts/ModelView/**/AssemblyReference.asmref
+/Scripts/ModelView/**/AssemblyReference.asmref.meta
