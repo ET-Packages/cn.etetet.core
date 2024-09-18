@@ -31,11 +31,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="../../Runtime/**/*.cs" xmlns="">
+        <Compile Include="$(SolutionDir)Packages\cn.etetet.*\Scripts\Core\Share\**\*.cs">
+            <Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
+        </Compile>
+        <Compile Include="$(SolutionDir)Packages\cn.etetet.*\Scripts\Core\Server\**\*.cs">
             <Link>%(RecursiveDir)%(FileName)%(Extension)</Link>
         </Compile>
         <ProjectReference Include="$(SolutionDir)Packages\cn.etetet.sourcegenerator\DotNet~\ET.SourceGenerator\ET.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-        <ProjectReference Include="..\..\..\cn.etetet.sourcegenerator\DotNet~\ET.SourceGeneratorAttribute\ET.SourceGeneratorAttribute.csproj" />
+        <ProjectReference Include="$(SolutionDir)Packages\cn.etetet.sourcegenerator\DotNet~\ET.SourceGeneratorAttribute\ET.SourceGeneratorAttribute.csproj" />
     </ItemGroup>
     
     <ItemGroup>
