@@ -50,7 +50,7 @@ namespace ET
                 Log.Warning($"actor not found mailbox, from: {actorId} current: {fiber.Address} {message}");
                 if (message is IRequest request)
                 {
-                    IResponse resp = MessageHelper.CreateResponse(request.GetType(), request.RpcId, ErrorCore.ERR_NotFoundActor);
+                    IResponse resp = MessageHelper.CreateResponse(request.GetType(), request.RpcId, ErrorCode.ERR_NotFoundActor);
                     self.Reply(actorId.Address, resp);
                 }
                 return;
@@ -69,13 +69,13 @@ namespace ET
         
         private static void Run(MessageSenderStruct self, IResponse response)
         {
-            if (response.Error == ErrorCore.ERR_MessageTimeout)
+            if (response.Error == ErrorCode.ERR_MessageTimeout)
             {
                 self.SetException(new RpcException(response.Error, $"Rpc error: request, 注意Actor消息超时，请注意查看是否死锁或者没有reply: actorId: {self.ActorId} {self.RequestType.FullName}, response: {response}"));
                 return;
             }
 
-            if (self.NeedException && ErrorCore.IsRpcNeedThrowException(response.Error))
+            if (self.NeedException && ErrorCode.IsRpcNeedThrowException(response.Error))
             {
                 self.SetException(new RpcException(response.Error, $"Rpc error: actorId: {self.ActorId} request: {self.RequestType.FullName}, response: {response}"));
                 return;
@@ -138,7 +138,7 @@ namespace ET
             IResponse response;
             if (!self.SendInner(actorId, (MessageObject)request))  // 纤程不存在
             {
-                response = MessageHelper.CreateResponse(requestType, rpcId, ErrorCore.ERR_NotFoundActor);
+                response = MessageHelper.CreateResponse(requestType, rpcId, ErrorCode.ERR_NotFoundActor);
                 return response;
             }
             
@@ -160,7 +160,7 @@ namespace ET
                 }
                 else
                 {
-                    IResponse response = MessageHelper.CreateResponse(requestType, rpcId, ErrorCore.ERR_Timeout);
+                    IResponse response = MessageHelper.CreateResponse(requestType, rpcId, ErrorCode.ERR_Timeout);
                     action.SetResult(response);
                 }
             }

@@ -77,7 +77,7 @@ namespace ET
                 {
                     // 这里不能返回堆栈给客户端
                     Log.Error(exception.ToString());
-                    response.Error = ErrorCore.ERR_RpcFail;
+                    response.Error = ErrorCode.ERR_RpcFail;
                 }
                 
                 // 等回调回来,session可以已经断开了,所以需要判断session InstanceId是否一样

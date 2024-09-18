@@ -62,7 +62,7 @@ namespace ET
 
                 Type responseType = OpcodeType.Instance.GetResponseType(action.RequestType);
                 IResponse response = (IResponse) Activator.CreateInstance(responseType);
-                response.Error = ErrorCore.ERR_Cancel;
+                response.Error = ErrorCode.ERR_Cancel;
                 action.SetResult(response);
             }
 
