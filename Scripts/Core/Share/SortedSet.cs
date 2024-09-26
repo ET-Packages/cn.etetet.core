@@ -1913,16 +1913,19 @@ namespace ET
 
                 // 2 log(n + 1) is the maximum height.
                 // 这里缓存了Stack，防止GC
-                if (set.stack != null)
+                lock (this._tree)
                 {
-                    _stack = set.stack;
-                    _stack.Clear();
-                    set.stack = null;
+                    if (set.stack != null)
+                    {
+                        _stack = set.stack;
+                        set.stack = null;
+                    }
+                    else
+                    {
+                        _stack = new Stack<Node>(2 * (int)Math.Log(set.Count + 1));
+                    }
                 }
-                else
-                {
-                    _stack = new Stack<Node>(2 * (int)Math.Log(set.Count + 1));
-                }
+
                 _current = null;
                 _reverse = reverse;
 
@@ -2006,7 +2009,11 @@ namespace ET
 
             public void Dispose()
             {
-                this._tree.stack = this._stack;
+                this._stack.Clear();
+                lock (this._tree)
+                {
+                    this._tree.stack = this._stack;
+                }
             }
 
             public T Current
