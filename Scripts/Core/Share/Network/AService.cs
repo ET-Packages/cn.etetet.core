@@ -10,8 +10,8 @@ namespace ET
         public Action<long, IPEndPoint> AcceptCallback;
         public Action<long, MemoryBuffer> ReadCallback;
         public Action<long, int> ErrorCallback;
-        
-        public long Id { get; set; }
+
+        public long Id { get; set; } = IdGenerater.Instance.GenerateId();
         
         public ServiceType ServiceType { get; protected set; }
         
@@ -60,13 +60,17 @@ namespace ET
         
         public virtual void Dispose()
         {
+            this.Id = 0;
         }
 
         public abstract void Update();
 
         public abstract void Remove(long id, int error = 0);
-        
-        public abstract bool IsDisposed();
+
+        public bool IsDisposed()
+        {
+            return this.Id == 0;
+        }
         
         public abstract void Create(long id, IPEndPoint ipEndPoint);
 

@@ -132,6 +132,11 @@ namespace ET
 		
 		public override void Dispose()
 		{
+			if (this.IsDisposed())
+			{
+				return;
+			}
+			
 			base.Dispose();
 			
 			this.acceptor?.Close();
@@ -143,7 +148,6 @@ namespace ET
 				TChannel channel = this.idChannels[id];
 				channel.Dispose();
 			}
-			this.idChannels.Clear();
 		}
 
 		public override void Remove(long id, int error = 0)
@@ -270,11 +274,6 @@ namespace ET
 						throw new ArgumentOutOfRangeException($"{e.LastOperation}");
 				}
 			}
-		}
-		
-		public override bool IsDisposed()
-		{
-			return this.acceptor == null;
 		}
 	}
 }

@@ -87,11 +87,6 @@ namespace ET
             this.routerAckCallback.Remove(id);
         }
         
-        public override bool IsDisposed()
-        {
-            return this.Transport == null;
-        }
-
         public override void Dispose()
         {
             if (this.IsDisposed())
