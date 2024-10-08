@@ -2,10 +2,40 @@ using System;
 
 namespace ET
 {
-    public struct EntityRef<T> where T: Entity
+    public struct EntityRef<T>: IEquatable<EntityRef<T>> where T: Entity
     {
         private readonly long instanceId;
         private T entity;
+
+        public override int GetHashCode()
+        {
+            return this.instanceId.GetHashCode();
+        }
+
+        public bool Equals(EntityRef<T> obj)
+        {
+            return this.instanceId == obj.instanceId;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is not EntityRef<T> entityRef)
+            {
+                return false;
+            }
+
+            return this.instanceId == entityRef.instanceId;
+        }
+        
+        public static bool operator ==(EntityRef<T> left, EntityRef<T> right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(EntityRef<T> left, EntityRef<T> right)
+        {
+            return !left.Equals(right);
+        }
 
         private EntityRef(T t)
         {
@@ -19,7 +49,7 @@ namespace ET
             this.entity = t;
         }
         
-        private T UnWrap
+        public T Entity
         {
             get
             {
@@ -43,12 +73,12 @@ namespace ET
 
         public static implicit operator T(EntityRef<T> v)
         {
-            return v.UnWrap;
+            return v.Entity;
         }
     }
     
     
-    public struct EntityWeakRef<T> where T: Entity
+    public struct EntityWeakRef<T>: IEquatable<EntityWeakRef<T>> where T: Entity
     {
         private long instanceId;
         // 使用WeakReference，这样不会导致entity dispose了却无法gc的问题
@@ -67,7 +97,7 @@ namespace ET
             this.weakRef = new WeakReference<T>(t);
         }
         
-        private T UnWrap
+        public T Entity
         {
             get
             {
@@ -98,7 +128,37 @@ namespace ET
 
         public static implicit operator T(EntityWeakRef<T> v)
         {
-            return v.UnWrap;
+            return v.Entity;
+        }
+        
+        public override int GetHashCode()
+        {
+            return this.instanceId.GetHashCode();
+        }
+
+        public bool Equals(EntityWeakRef<T> obj)
+        {
+            return this.instanceId == obj.instanceId;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is not EntityWeakRef<T> entityRef)
+            {
+                return false;
+            }
+
+            return this.instanceId == entityRef.instanceId;
+        }
+        
+        public static bool operator ==(EntityWeakRef<T> left, EntityWeakRef<T> right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(EntityWeakRef<T> left, EntityWeakRef<T> right)
+        {
+            return !left.Equals(right);
         }
     }
 }
