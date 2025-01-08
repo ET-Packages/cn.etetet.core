@@ -2,72 +2,129 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-
 using UnityEditor;
 using UnityEngine;
 
 namespace ET
 {
-    [CustomEditor(typeof (ComponentView))]
-    public class ComponentViewEditor: Editor
+    [CustomEditor(typeof(ComponentView))]
+    public class ComponentViewEditor : Editor
     {
         public override void OnInspectorGUI()
         {
-            ComponentView componentView = (ComponentView) target;
-            Entity component = componentView.Component;
-            ComponentViewHelper.Draw(component);
+            var componentView = (ComponentView)target;
+            var component     = componentView.Component;
+            ComponentViewHelper.DrawAction(component);
         }
     }
 
-    public static class ComponentViewHelper
+    public static partial class ComponentViewHelper
     {
-        private static readonly List<ITypeDrawer> typeDrawers = new List<ITypeDrawer>();
+        private static readonly List<ITypeDrawer> typeDrawers = new();
+
+        private static readonly Dictionary<Type, EntityDrawer> entityDrawerDict = new();
+
+        private static Action<Entity> drawAction;
 
         static ComponentViewHelper()
         {
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            var assemblies        = AppDomain.CurrentDomain.GetAssemblies();
+            var systemGenericType = typeof(EntityDrawerSystem<>);
+
             foreach (Assembly assembly in assemblies)
             {
                 foreach (Type type in assembly.GetTypes())
                 {
-                    if (!type.IsDefined(typeof (TypeDrawerAttribute)))
+                    if (type.IsDefined(typeof(TypeDrawerAttribute)))
                     {
-                        continue;
+                        ITypeDrawer iTypeDrawer = (ITypeDrawer)Activator.CreateInstance(type);
+                        typeDrawers.Add(iTypeDrawer);
                     }
 
-                    ITypeDrawer iTypeDrawer = (ITypeDrawer) Activator.CreateInstance(type);
-                    typeDrawers.Add(iTypeDrawer);
+                    if (type.IsDefined(typeof(EntityDrawerAttribute)))
+                    {
+                        var baseType = type.BaseType;
+                        if (baseType is not { IsGenericType: true })
+                        {
+                            continue;
+                        }
+
+                        if (baseType.GetGenericTypeDefinition() != systemGenericType)
+                        {
+                            continue;
+                        }
+
+                        var entityType = baseType.GetGenericArguments()[0];
+                        var attribute  = type.GetCustomAttribute<EntityDrawerAttribute>();
+                        var iDrawer    = (IEntityDrawer)Activator.CreateInstance(type);
+                        var order      = attribute.Order;
+                        var drawerData = new EntityDrawer
+                        {
+                            EntityType     = entityType,
+                            Drawer         = iDrawer,
+                            Order          = order,
+                            SkipTypeDrawer = attribute.SkipTypeDrawer
+                        };
+
+                        if (entityDrawerDict.TryGetValue(entityType, out var drawer))
+                        {
+                            if (order > drawer.Order)
+                            {
+                                entityDrawerDict[entityType] = drawerData;
+                            }
+                        }
+                        else
+                        {
+                            entityDrawerDict.Add(entityType, drawerData);
+                        }
+                    }
                 }
             }
+
+            drawAction = Draw;
+
+            OverrideDraw();
         }
-        
-        public static void Draw(Entity entity)
+
+        public static void DrawAction(Entity entity)
         {
             try
             {
-                FieldInfo[] fields = entity.GetType()
-                        .GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                drawAction?.Invoke(entity);
+            }
+            catch (Exception e)
+            {
+                Debug.Log($"组件视图绘制错误: {entity.GetType().FullName}, {e}");
+            }
+        }
 
-                EditorGUILayout.BeginVertical();
-                
-                EditorGUILayout.LongField("InstanceId: ", entity.InstanceId);
-                
-                EditorGUILayout.LongField("Id: ", entity.Id);
+        private static void Draw(Entity entity)
+        {
+            EditorGUILayout.BeginVertical();
 
+            EditorGUILayout.LongField("InstanceId: ", entity.InstanceId);
+
+            EditorGUILayout.LongField("Id: ", entity.Id);
+
+            var entityType = entity.GetType();
+            entityDrawerDict.TryGetValue(entityType, out var entityDrawer);
+            var skipTypeDrawer = entityDrawer?.SkipTypeDrawer ?? false;
+
+            if (!skipTypeDrawer)
+            {
+                var fields = entityType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
                 foreach (FieldInfo fieldInfo in fields)
                 {
                     Type type = fieldInfo.FieldType;
-                    if (type.IsDefined(typeof (HideInInspector), false))
+                    if (type.IsDefined(typeof(HideInInspector), false))
                     {
                         continue;
                     }
 
-                    if (fieldInfo.IsDefined(typeof (HideInInspector), false))
+                    if (fieldInfo.IsDefined(typeof(HideInInspector), false))
                     {
                         continue;
                     }
-
-                    object value = fieldInfo.GetValue(entity);
 
                     foreach (ITypeDrawer typeDrawer in typeDrawers)
                     {
@@ -82,27 +139,32 @@ namespace ET
                             fieldName = fieldName.Substring(1, fieldName.Length - 17);
                         }
 
+                        object value = fieldInfo.GetValue(entity);
+
                         try
                         {
-                            value = typeDrawer.DrawAndGetNewValue(type, fieldName, value, null);
+                            value = typeDrawer.DrawAndGetNewValue(type, fieldName, value, entity);
                         }
                         catch (Exception e)
                         {
                             Debug.LogError(e);
                         }
-                        
+
                         fieldInfo.SetValue(entity, value);
                         break;
                     }
                 }
+            }
 
-                EditorGUILayout.EndVertical();
-            }
-            catch (Exception e)
+            if (entityDrawer != null)
             {
-                UnityEngine.Debug.Log($"component view error: {entity.GetType().FullName} {e}");
+                entityDrawer.Drawer.Drawer(entity);
             }
+
+            EditorGUILayout.EndVertical();
         }
+
+        static partial void OverrideDraw();
     }
 }
 #endif
