@@ -84,7 +84,7 @@ namespace ET
 
                         try
                         {
-                            value = typeDrawer.DrawAndGetNewValue(type, fieldName, value, null);
+                            value = typeDrawer.DrawAndGetNewValue(type, fieldName, value, entity);
                         }
                         catch (Exception e)
                         {
