@@ -22,6 +22,10 @@ namespace ET
     {
     }
     
+    public interface IAwake<A, B, C, D, E>
+    {
+    }
+
     public interface IAwakeSystem: ISystemType
     {
         void Run(Entity o);
@@ -45,6 +49,11 @@ namespace ET
     public interface IAwakeSystem<A, B, C, D>: ISystemType
     {
         void Run(Entity o, A a, B b, C c, D d);
+    }
+
+    public interface IAwakeSystem<A, B, C, D, E>: ISystemType
+    {
+        void Run(Entity o, A a, B b, C c, D d, E e);
     }
 
     [EntitySystem]
@@ -150,5 +159,26 @@ namespace ET
         }
 
         protected abstract void Awake(T self, A a, B b, C c, D d);
+    }
+
+    [EntitySystem]
+    public abstract class AwakeSystem<T, A, B, C, D, E> : SystemObject, IAwakeSystem<A, B, C, D, E> where T: Entity, IAwake<A, B, C, D, E>
+    {
+        Type ISystemType.Type()
+        {
+            return typeof(T);
+        }
+
+        Type ISystemType.SystemType()
+        {
+            return typeof(IAwakeSystem<A, B, C, D, E>);
+        }
+
+        void IAwakeSystem<A, B, C, D, E>.Run(Entity o, A a, B b, C c, D d, E e)
+        {
+            this.Awake((T)o, a, b, c, d, e);
+        }
+
+        protected abstract void Awake(T self, A a, B b, C c, D d, E e);
     }
 }
