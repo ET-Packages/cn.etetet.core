@@ -1,7 +1,7 @@
 ﻿{
   "name": "cn.etetet.core",
   "displayName": "ET.Core",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "et框架核心, 实现了纤程，网络，entity等et基础功能",
   "author": {
     "name": "tanghai",

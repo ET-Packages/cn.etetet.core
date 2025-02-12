@@ -36,7 +36,7 @@ namespace ET
                     Thread.Sleep(1);
                     
                     // count最小为1
-                    count = this.fiberManager.Count() / this.threads.Count + 1;
+                    count = this.idQueue.Count / this.threads.Count + 1;
                 }
 
                 --count;
